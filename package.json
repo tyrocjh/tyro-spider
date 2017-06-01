@@ -1,0 +1,25 @@
+{
+  "name": "spider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "spider": "node task/spider.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyrocjh/tyro-spider.git"
+  },
+  "author": "tyro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tyrocjh/tyro-spider/issues"
+  },
+  "homepage": "https://github.com/tyrocjh/tyro-spider#readme",
+  "dependencies": {
+    "eventproxy": "^0.3.5",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.10.4",
+    "superagent": "^3.5.2"
+  }
+}
