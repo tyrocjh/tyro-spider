@@ -6,8 +6,11 @@
 
 3.限制并发量
 
+## 入口
 
-nodejs debug的使用:
+* collectProxy.js 收集代理IP
+
+## nodejs debug的使用:
 
 1.node debug task/collectProxy.js
 
