@@ -7,21 +7,52 @@ var http = require("http"),
 		cheerio = require("cheerio"),
 		async = require("async"),
 		fs = require('fs'),
-		_ = require('lodash');
+		_ = require('lodash'),
+		logger = require('./logs');
 
 require('superagent-proxy')(request);
 
 var collectProxy = (function() {
-	// 存放收集到的代理IP
-	var proxyArr = [];
 	// 国内代理IP网站
 	var targetUrl = 'http://www.xicidaili.com/nn/';
 	// 测试代理IP是否可用
 	var proxyCheckUrl = 'http://ip.chinaz.com/getip.aspx';
+	// 本地proxy文件路径
+	var localProxyFile = './task/data/proxy.txt';
+	// 本地userAgent文件路径
+	var localUserAgentFile = './task/data/userAgents.txt';
+	// 存放收集到的代理IP
+	var proxyArrTmp = [];
+	// 存放可用的代理IP
+	var proxyArr = [];
+	// 存放userAgent
+	var userAgentArr = [];
 
+	function getRandom() {
+		var max = userAgentArr.length;
+		return 1 + Math.floor(Math.random() * max);
+	}
+
+	// 读取userAgent文件
+	function readData() {
+		fs.readFile(localUserAgentFile, 'utf-8', function(err, data) {
+			if(err) {
+		 		console.log('文件读取失败！');
+			} else {
+				var arr = data.split('\r\n');
+				for(var key in arr) {
+					userAgentArr.push(arr[key].substring(1, arr[key].length-1));
+				}
+				console.log('文件读取成功！');
+				checkAndWrite();
+			}
+		});
+	}
+
+	// 把可用的代理IP写入本地文件
 	function writeData() {
 		var result = proxyArr.toString().replace(/,/g, '\n');
-		fs.writeFile('./task/data/proxy.txt', result, function(err) {
+		fs.writeFile(localProxyFile, result, function(err) {
 		    if(err) {
 		    	console.log('写文件操作失败！');
 		    } else {
@@ -30,96 +61,116 @@ var collectProxy = (function() {
 		});
 	}
 
-	function checkData() {
-	 	request
-	  	.get(proxyCheckUrl)
-	  	.proxy('http://115.46.86.108:80')
-	  	.set({ 'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 7.1; Trident/5.0)' })
-	  	.end(function(err, res){
-	  		if(err) {
-	  			console.log('error: ', err);
-	  		} else {
-	  			console.log('success...');
-	  			console.log(res.text);
-	  			// writeData();
-	  		}
-	  	});
+	// 使用superagent发送请求
+	function sendRequest(options, callback) {
+		var target = options.target || '';
+		var proxy = options.proxy || '';
+		var userAgent = options.userAgent || 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)';
+		var handleSuccess = options.success || function(res) {};
+		var handleError = options.error || function(err) {};
 
-		// 并发控制
-    // async.mapLimit(urls, urls.length, function(url, callback) {
-    //     console.log("开始收集代理IP...");
-    //     requestAndCollect(url, callback);
-    // }, function(err, result) {
-    //     if(err) {
-    //       console.log('error: ', err);
-    //     } else {
-    //     	// console.log(result);
-    //       console.log("代理IP收集完毕！！！");
-    //       handleResult(result);
-    //       checkAndWrite();
-    //     }
-    // });
-	}
-
-	function handleResult(arr) {
-		for(var key in arr) {
-			proxyArr = proxyArr.concat(arr[key]);
+		if(proxy) {
+		 	request
+		  	.get(target)
+		  	.proxy(proxy)
+		  	.set({ 'User-Agent': userAgent })
+		  	.timeout(3000)
+		  	.end(function(err, res) {
+		  		if(err) {
+		  			handleError(err);
+		  			callback(null, null);
+		  		} else {
+		  			handleSuccess(res);
+		  			callback(null, null);
+		  		}
+		  	});
+		} else {
+		 	request
+		  	.get(target)
+		  	.set({ 'User-Agent': userAgent })
+		  	.timeout(3000)
+		  	.end(function(err, res) {
+		  		if(err) {
+		  			handleError(err);
+		  			callback(null, null);
+		  		} else {
+		  			handleSuccess(res);
+		  			callback(null, null);
+		  		}
+		  	});
 		}
-		proxyArr = _.uniq(proxyArr);
 	}
 
-	// 处理数组，并测试代理IP是否可用，最后写入本地文件
-	function checkAndWrite(result) {
-		handleResult(result);
-		console.info(proxyArr);
-		console.info(proxyArr.length);
-		// checkData();
+	// 测试代理IP是否可用
+	function checkProxy() {
+		console.log("开始检测代理IP是否可用...");
+    async.mapLimit(proxyArrTmp, 10, function(proxy, callback) {
+        var options = {
+        	target: proxyCheckUrl,
+        	proxy: 'http://' + proxy,
+        	userAgent: userAgentArr[getRandom()-1],
+        	success: function(res) {
+        		proxyArr.push(proxy);
+        		logger.proxyLog.info('success: ', proxy);
+        	},
+        	error: function(err) {
+        		logger.proxyLog.info('error: ', err);
+        	}
+        };
+        setTimeout(function() {
+        	sendRequest(options, callback);
+        }, 500);
+    }, function(err, result) {
+        if(err) {
+          console.log('error: ', err);
+        } else {
+          console.log("代理IP检测完毕！！！");
+          writeData();
+        }
+    });
 	}
 
-	function requestAndCollect(url, callback) {
-	 	request
-	  	.get(url)
-	  	.set({ 'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 7.1; Trident/5.0)' })
-	  	.end(function(err, res) {
-	  		if(err) {
-	  			console.log('error: ', err);
-	  		} else {
-	  			var arr = [];
-	  			var $ = cheerio.load(res.text);
-	  			$('#ip_list tr').each(function(idx, el) {
-	  				if(idx !== 0) {
-		  				var ip = $(el).find('td').eq(1).text();
-		  				var port = $(el).find('td').eq(2).text();
-		  				var proxy = ip + ':' + port;
-		  				arr.push(proxy);
-	  				}
-	  			});
-	  			callback(null, arr);
-	  		}
-	  	});
+	function checkAndWrite() {
+		proxyArrTmp = _.uniq(proxyArrTmp);
+		checkProxy();
 	}
 
 	// 收集代理IP
 	function collectData() {
 		var urls = [];
 
-		// 只取前5页的数据（每页100条数据）
-		for(var i=1; i<=2; i++) {
+		// 从目标网站取前20页的数据（每页100条）
+		for(var i=1; i<=20; i++) {
 			urls.push(targetUrl + i);
 		}
 
-		// 并发控制
+		console.log("开始收集代理IP...");
     async.mapLimit(urls, urls.length, function(url, callback) {
-        console.log("开始收集代理IP...");
-        requestAndCollect(url, callback);
+      var options = {
+      	target: url,
+      	success: function(res) {
+	  			var $ = cheerio.load(res.text);
+	  			$('#ip_list tr').each(function(idx, el) {
+	  				if(idx !== 0) {
+		  				var ip = $(el).find('td').eq(1).text();
+		  				var port = $(el).find('td').eq(2).text();
+		  				var proxy = ip + ':' + port;
+		  				proxyArrTmp.push(proxy);
+	  				}
+	  			});
+      	},
+      	error: function(err) {
+      		console.log(err);
+      	}
+      };
+      sendRequest(options, callback);
     }, function(err, result) {
-        if(err) {
-          console.log('error: ', err);
-        } else {
-        	// console.log(result);
-          console.log("代理IP收集完毕！！！");
-          checkAndWrite(result);
-        }
+      if(err) {
+        console.log('error: ', err);
+      } else {
+        console.log("代理IP收集完毕！！！");
+        readData();
+      }
     });
 	}
 
