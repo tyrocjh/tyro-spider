@@ -1,13 +1,20 @@
 # tyro-spider
 
 1.使用代理IP
+
 2.使用user-agent
+
 3.限制并发量
 
+
 nodejs debug的使用:
+
 1.node debug task/collectProxy.js
+
 2.执行完1后程序会在第一行停止，输入c（continue），即可跳到断点处
+
 3.输入repl，放可调试变量
+
 4.crtl+c 退出debug模式
 
 
