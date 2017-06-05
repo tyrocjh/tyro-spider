@@ -1,7 +1,6 @@
 /*
 	功能：收集可用的代理IP，存放到/data下的proxy.txt
 */
-
 var http = require("http"),
 		request = require('superagent')
 		cheerio = require("cheerio"),
@@ -41,7 +40,7 @@ var collectProxy = (function() {
 			} else {
 				var arr = data.split('\r\n');
 				for(var key in arr) {
-					userAgentArr.push(arr[key].substring(1, arr[key].length-1));
+					userAgentArr.push(arr[key]);
 				}
 				console.log('文件读取成功！');
 				checkAndWrite();
