@@ -1,5 +1,9 @@
 # tyro-spider
 
+http://space.bilibili.com/1/#!/
+
+http://space.bilibili.com/128020000/#!/
+
 1.使用代理IP
 
 2.使用user-agent
