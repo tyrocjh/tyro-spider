@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "collectProxy": "node task/collectProxy.js"
+    "collectProxy": "node task/collect-proxy.js",
+    "bilibiliSpider": "node task/bilibili-spider.js"
   },
   "repository": {
     "type": "git",

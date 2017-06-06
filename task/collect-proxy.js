@@ -19,7 +19,7 @@ var collectProxy = (function() {
 	// 本地proxy文件路径
 	var localProxyFile = './task/data/proxy.txt';
 	// 本地userAgent文件路径
-	var localUserAgentFile = './task/data/userAgents.txt';
+	var localUserAgentFile = './task/data/user-agent.txt';
 	// 存放收集到的代理IP
 	var proxyArrTmp = [];
 	// 存放可用的代理IP
