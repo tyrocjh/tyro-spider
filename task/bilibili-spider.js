@@ -70,6 +70,7 @@ var bilibiliSpider = (function() {
 	function saveUser(user) {
 		User.create(user, function(err, model) {
 			if (err) {
+				console.log(err);
 				logger.bilibiliSpider.info('user ', user.mid, ' save failed...');
 			}
 		});
@@ -119,8 +120,12 @@ var bilibiliSpider = (function() {
 		Promise.all([proxyRead, userAgentRead]).then(function (result) {
 			var proxyCount = proxyArr.length;
 			var userAgentCount = userAgentArr.length;
-			for(var i=1; i<=3; i++) {
-				spider(i, proxyCount, userAgentCount);
+			for(var i=1; i<=1000; i++) {
+				(function(i) {
+					setTimeout(function() {
+						spider(i, proxyCount, userAgentCount);
+					}, 500 * i);
+				})(i);
 			}
 		});
 	}

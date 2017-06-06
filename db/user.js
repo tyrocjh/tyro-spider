@@ -48,8 +48,6 @@ var User = new mongoose.Schema({
 		condition: String
 	},
 	official_verify: {
-		type: Number,
-		desc: String
 	}
 }, {
 	timestamps: true
