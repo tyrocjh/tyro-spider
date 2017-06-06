@@ -1,18 +1,15 @@
 # tyro-spider
 
-http://space.bilibili.com/1/#!/
-
-http://space.bilibili.com/128020000/#!/
-
 1.使用代理IP
 
 2.使用user-agent
 
 3.限制并发量
 
-## 入口
+## 入口文件
 
-* collectProxy.js 收集代理IP
+* collect-proxy.js 收集可用的代理IP
+* bilibili-spider.js 爬取B站数据（先运行collect-proxy.js更新可用的代理IP）
 
 ## nodejs debug的使用:
 
@@ -32,6 +29,8 @@ http://space.bilibili.com/128020000/#!/
 * [cheerio](https://github.com/cheeriojs/cheerio) 【跟jquery几乎一样用法】
 * [eventproxy](https://github.com/JacksonTian/eventproxy) 【并发】
 * [async](https://github.com/caolan/async) 【控制并发的数量】
+* [promise](https://segmentfault.com/a/1190000007703723?from=timeline&isappinstalled=1)【promise解决回调嵌套】
+* [promise](https://segmentfault.com/a/1190000002928371)【promise.all】
 
 
 ## 参考
