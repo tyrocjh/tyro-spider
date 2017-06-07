@@ -116,9 +116,7 @@ var collectProxy = (function() {
         		logger.proxyLog.info('error: ', err);
         	}
         };
-        setTimeout(function() {
-        	sendRequest(options, callback);
-        }, 500);
+        sendRequest(options, callback);
     }, function(err, result) {
         if(err) {
           console.log('error: ', err);

@@ -27,28 +27,10 @@ var User = new mongoose.Schema({
 	theme_preview: String,
 	im9_sign: String,
 	attentions: [Number],
-	level_info: {
-		next_exp: Number,
-		current_level: Number,
-		current_min: Number,
-		current_exp: Number
-	},
-	pendant: {
-		pid: Number,
-		name: String,
-		image: String,
-		expire: Number
-	},
-	nameplate: {
-		nid: Number,
-		name: String,
-		image: String,
-		image_small: String,
-		level: String,
-		condition: String
-	},
-	official_verify: {
-	}
+	level_info: {},
+	pendant: {},
+	nameplate: {},
+	official_verify: {}
 }, {
 	timestamps: true
 });

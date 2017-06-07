@@ -9,7 +9,7 @@
 ## 入口文件
 
 * collect-proxy.js 收集可用的代理IP
-* bilibili-spider.js 爬取B站数据（先运行collect-proxy.js更新可用的代理IP）
+* bilibili-spider.js 爬取B站数据（collect-proxy.js收集的代理IP可能没啥用了。。。）
 
 ## nodejs debug的使用:
 
@@ -38,4 +38,5 @@
 * [B站用户爬虫](https://github.com/airingursb/bilibili-user/blob/master/bilibili_user.py)
 * [爬虫-代理IP使用](http://www.cnblogs.com/hearzeus/p/5157016.html)
 * [ip测试](http://ip.chinaz.com/getip.aspx)
-* [免费IP代理](http://www.xicidaili.com/nn/1)
+* [免费IP代理](http://www.goubanjia.com/free/gngn/index.shtml 这个比下面那个好用)
+* [免费IP代理](http://www.xicidaili.com/nn/1 这个不好用)
