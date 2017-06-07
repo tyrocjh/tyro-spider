@@ -93,14 +93,14 @@ var bilibiliSpider = (function() {
 	  	.timeout(4000)
 	  	.end(function(err, res) {
 	  		if(err) {
-	  			logger.bilibiliSpider.info('error: ', mid, err);
+	  			logger.bilibiliSpider.info('error: ', mid, ' ip: ', proxy, err);
 	  		} else {
 	  			var result = JSON.parse(res.text);
 	  			if(result.status) {
 	  				saveUser(result.data);
-	  				logger.bilibiliSpider.info('Response success: ', mid);
+	  				logger.bilibiliSpider.info('Response success: ', mid, ' ip: ', proxy);
 	  			} else {
-	  				logger.bilibiliSpider.info('Response false: ', mid);
+	  				logger.bilibiliSpider.info('Response false: ', mid, ' ip: ', proxy);
 	  			}
 	  		}
 	  	});
@@ -120,7 +120,7 @@ var bilibiliSpider = (function() {
 		Promise.all([proxyRead, userAgentRead]).then(function (result) {
 			var proxyCount = proxyArr.length;
 			var userAgentCount = userAgentArr.length;
-			for(var i=1; i<=1; i++) {
+			for(var i=1; i<=100000; i++) {
 				(function(i) {
 					setTimeout(function() {
 						spider(i, proxyCount, userAgentCount);
