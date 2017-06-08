@@ -1,11 +1,5 @@
 # tyro-spider
 
-21:12
-5:38
-
-60754
-56642
-
 1.使用代理IP
 
 2.使用user-agent
@@ -14,8 +8,8 @@
 
 ## 入口文件
 
-* collect-proxy.js 收集可用的代理IP
-* bilibili-spider.js 爬取B站数据（collect-proxy.js收集的代理IP可能没啥用了。。。）
+* collect-proxy.js 收集可用的代理IP（然而免费的代理IP并没啥用。。。）
+* bilibili-spider.js 爬取B站数据
 
 ## nodejs debug的使用:
 

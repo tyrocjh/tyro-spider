@@ -4,7 +4,7 @@ log4js.configure({
 	appenders: [
 		{ type: 'console' },
 		{ type: 'file', filename: 'task/logs/proxy.log', category: 'proxy' },
-		{ type: 'file', filename: 'task/logs/bilibili-spider.log', category: 'bilibili-spider' }
+		{ type: 'datefile', filename: 'task/logs/bilibili-spider', category: 'bilibili-spider', pattern: '-yyyy-MM-dd.log', alwaysIncludePattern: true }
 	]
 });
 

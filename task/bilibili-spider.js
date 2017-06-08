@@ -90,7 +90,7 @@ var bilibiliSpider = (function() {
 	  		'Referer': 'http://www.bilibili.com/index.html',
 	  		'User-Agent': userAgent
 	  	})
-	  	.timeout(4000)
+	  	.timeout(3000)
 	  	.end(function(err, res) {
 	  		if(err) {
 	  			logger.bilibiliSpider.info('error: ', mid, ' ip: ', proxy, err);
@@ -120,11 +120,11 @@ var bilibiliSpider = (function() {
 		Promise.all([proxyRead, userAgentRead]).then(function (result) {
 			var proxyCount = proxyArr.length;
 			var userAgentCount = userAgentArr.length;
-			for(var i=1; i<=100000; i++) {
+			for(var i=1; i<=1000000; i++) {
 				(function(i) {
 					setTimeout(function() {
 						spider(i, proxyCount, userAgentCount);
-					}, 500 * i);
+					}, 50 * i);
 				})(i);
 			}
 		});
