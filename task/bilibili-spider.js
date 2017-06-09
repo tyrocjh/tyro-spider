@@ -1,6 +1,6 @@
 /*
 	功能：爬取bilibili用户数据
-	通过http://space.bilibili.com/ajax/member/GetInfo这个API
+	通过http://space.bilibili.com/ajax/member/GetInfo这个API（用户ID是从1开始递增，所以规则简单）
 	需要通过POST提交，并带上mid（即用户ID）
 	目前B站的用户ID大概是从1到128020000
 
@@ -145,11 +145,12 @@ var bilibiliSpider = (function() {
 	function start() {
 		Promise.all([proxyRead(localProxyFile, proxyArr), userAgentRead()]).then(function (result) {
 			var userAgentCount = userAgentArr.length;
-			for(var i=1; i<=2000000; i++) {
+			// 爬50万条数据
+			for(var i=1; i<=500000; i++) {
 				(function(i) {
 					setTimeout(function() {
 						spider(i, userAgentCount);
-					}, 10 * i);
+					}, 200 * i);
 				})(i);
 			}
 		});
