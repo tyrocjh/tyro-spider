@@ -13,6 +13,7 @@ var http = require("http"),
 		cheerio = require("cheerio"),
 		async = require("async"),
 		fs = require('fs'),
+		_ = require('lodash'),
 		config = require('../db/config'),
 		User = require('../db/user'),
 		logger = require('./logs');
@@ -75,7 +76,8 @@ var bilibiliSpider = (function() {
 	}
 
 	function writeData() {
-		var result = proxyArr.toString().replace(/,/g, '\n');
+		proxyArr = _.uniq(proxyArr);
+		var result = proxyArr.toString().replace(/,/g, '\r\n');
 		fs.writeFile(localProxyFile, result, function(err) {
 		    if(err) {
 		    	console.log('写文件操作失败！');
@@ -192,7 +194,6 @@ var bilibiliSpider = (function() {
 	      } else {
 	        console.log("代理IP检测完毕！！！");
 	        writeData();
-	        console.info(proxyArr.length);
 	      }
 	    });
 		});
