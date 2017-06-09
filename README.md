@@ -8,7 +8,7 @@
 
 ## 入口文件
 
-* collect-proxy.js 收集可用的代理IP（然而免费的代理IP并没啥用。。。）
+* collect-proxy.js 收集可用的代理IP（然而免费的代理IP并没啥用。。。花钱买算了呗。。。）
 * bilibili-spider.js 爬取B站数据
 
 ## nodejs debug的使用:
