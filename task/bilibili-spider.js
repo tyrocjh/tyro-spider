@@ -1,4 +1,7 @@
 /*
+	遗留问题：由于当请求失败时，会从proxyArr删除对应的IP，有可能导致proxyArr为空；
+	方案：proxyArr为空时，再去爬IP；暂时没心情实现此功能，以后用到再补。
+
 	功能：爬取bilibili用户数据
 	通过http://space.bilibili.com/ajax/member/GetInfo这个API（用户ID是从1开始递增，所以规则简单）
 	需要通过POST提交，并带上mid（即用户ID）
